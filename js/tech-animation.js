@@ -1,12 +1,32 @@
-// Create this as a file named interactive-solar-system.js
+// Create this as a file named optimized-solar-system.js
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector('.animation-container');
     if (!container) return;
     
+    // Performance check - if the device is likely too slow, don't run the animation
+    function isLowPerformanceDevice() {
+      // Check for mobile
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      // Check for low memory (if available)
+      const lowMemory = navigator.deviceMemory && navigator.deviceMemory < 4;
+      
+      return isMobile || lowMemory;
+    }
+    
+    if (isLowPerformanceDevice()) {
+      // Don't run animation on potentially slow devices
+      container.style.display = 'none';
+      return;
+    }
+    
     // Scene, camera, and renderer setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: false, // Disable antialiasing for performance
+      alpha: true,
+      precision: 'mediump' // Use medium precision for better performance
+    });
     
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setClearColor(0x000000, 0);
@@ -23,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
     scene.add(pointLight);
     
     // Create the sun
-    const sunGeometry = new THREE.SphereGeometry(5, 32, 32);
+    const sunGeometry = new THREE.SphereGeometry(5, 16, 16); // Reduced segments
     const sunMaterial = new THREE.MeshBasicMaterial({
       color: 0xffcc00,
       transparent: true,
@@ -33,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     scene.add(sun);
     
     // Sun glow effect
-    const sunGlowGeometry = new THREE.SphereGeometry(6, 32, 32);
+    const sunGlowGeometry = new THREE.SphereGeometry(6, 16, 16); // Reduced segments
     const sunGlowMaterial = new THREE.MeshBasicMaterial({
       color: 0xffcc00,
       transparent: true,
@@ -53,15 +73,14 @@ document.addEventListener('DOMContentLoaded', function() {
       0xffdd00  // Saturn - Yellow
     ];
     
-    const planetSizes = [0.8, 1.4, 1.5, 1.2, 3, 2.5];
-    const planetDistances = [8, 12, 16, 22, 30, 38];
-    
-    // SLOWER orbit speeds
-    const planetSpeeds = [0.005, 0.0035, 0.0025, 0.0015, 0.001, 0.0007];
+    // Reduced number of planets
+    const planetSizes = [0.8, 1.5, 3, 2.5];
+    const planetDistances = [10, 18, 28, 38];
+    const planetSpeeds = [0.003, 0.002, 0.001, 0.0005];
     
     // Create orbit rings
     const createOrbitRing = (radius) => {
-      const orbitGeometry = new THREE.RingGeometry(radius - 0.1, radius + 0.1, 128);
+      const orbitGeometry = new THREE.RingGeometry(radius - 0.1, radius + 0.1, 64); // Reduced segments
       const orbitMaterial = new THREE.MeshBasicMaterial({
         color: 0xffffff,
         side: THREE.DoubleSide,
@@ -74,11 +93,11 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Add planets with orbits
-    for (let i = 0; i < planetColors.length; i++) {
+    for (let i = 0; i < 4; i++) { // Reduced from 6 to 4 planets
       createOrbitRing(planetDistances[i]);
       
-      const planetGeometry = new THREE.SphereGeometry(planetSizes[i], 32, 32);
-      const planetMaterial = new THREE.MeshLambertMaterial({
+      const planetGeometry = new THREE.SphereGeometry(planetSizes[i], 16, 16); // Reduced segments
+      const planetMaterial = new THREE.MeshBasicMaterial({ // Changed from MeshLambertMaterial for performance
         color: planetColors[i]
       });
       
@@ -101,8 +120,8 @@ document.addEventListener('DOMContentLoaded', function() {
       planets.push(planet);
       
       // Add Saturn's ring for the last planet
-      if (i === 5) {
-        const ringGeometry = new THREE.RingGeometry(3, 5, 32);
+      if (i === 3) {
+        const ringGeometry = new THREE.RingGeometry(3, 5, 24); // Reduced segments
         const ringMaterial = new THREE.MeshBasicMaterial({
           color: 0xffcc66,
           side: THREE.DoubleSide,
@@ -116,16 +135,16 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Add some random stars
+    // Add fewer stars
     const starGeometry = new THREE.BufferGeometry();
     const starMaterial = new THREE.PointsMaterial({
       color: 0xffffff,
-      size: 0.2,
+      size: 0.3,
       transparent: true
     });
     
     const starVertices = [];
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 500; i++) { // Reduced from 1000 to 500 stars
       const x = (Math.random() - 0.5) * 200;
       const y = (Math.random() - 0.5) * 200;
       const z = (Math.random() - 0.5) * 200;
@@ -136,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
     
-    // Mouse interaction variables
+    // Mouse interaction variables with throttling
     const mouse = new THREE.Vector2();
     let mouseX = 0;
     let mouseY = 0;
@@ -145,8 +164,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const windowHalfX = container.clientWidth / 2;
     const windowHalfY = container.clientHeight / 2;
     
+    // Throttle the mouse move event
+    let lastMouseMoveTime = 0;
+    
     // Mouse move event handler
     function onMouseMove(event) {
+      // Throttle the event to improve performance
+      const now = Date.now();
+      if (now - lastMouseMoveTime < 50) return; // Only process every 50ms
+      lastMouseMoveTime = now;
+      
       // Calculate mouse position relative to the container
       const rect = container.getBoundingClientRect();
       const x = event.clientX - rect.left;
@@ -156,127 +183,105 @@ document.addEventListener('DOMContentLoaded', function() {
       mouse.y = -(y / container.clientHeight) * 2 + 1;
       
       // Track mouse position for camera movement
-      targetMouseX = (x - windowHalfX) * 0.003;
-      targetMouseY = (y - windowHalfY) * 0.003;
-      
-      // Create ripple effect - planets move away from cursor
-      const vector = new THREE.Vector3(mouse.x, mouse.y, 0);
-      vector.unproject(camera);
-      const dir = vector.sub(camera.position).normalize();
-      const distance = -camera.position.z / dir.z;
-      const pos = camera.position.clone().add(dir.multiplyScalar(distance));
-      
-      // Move planets based on mouse cursor
-      planets.forEach((planet) => {
-        const planetPos = planet.position.clone();
-        planetPos.project(camera);
-        
-        // Calculate 2D distance from mouse to planet
-        const dx = planetPos.x - mouse.x;
-        const dy = planetPos.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        
-        // If mouse is close to planet, push it slightly away
-        if (dist < 0.5) {
-          // Calculate repulsion factor
-          const repulsion = (1 - dist * 2) * 5;
-          
-          // Move planet along its orbit
-          planet.userData.angle += repulsion * 0.01;
-          
-          // Recalculate planet position
-          planet.position.x = Math.cos(planet.userData.angle) * planet.userData.distance;
-          planet.position.z = Math.sin(planet.userData.angle) * planet.userData.distance;
-        }
-      });
+      targetMouseX = (x - windowHalfX) * 0.002; // Reduced sensitivity
+      targetMouseY = (y - windowHalfY) * 0.002; // Reduced sensitivity
     }
     
-    // Track mouse movement over the container
-    container.addEventListener('mousemove', onMouseMove, false);
+    // Track mouse movement over the container with passive listener for better performance
+    container.addEventListener('mousemove', onMouseMove, { passive: true });
+    
+    // For better performance, use a fixed timestep for animations
+    const timeStep = 1000 / 30; // Target 30fps
+    let lastTime = 0;
+    let deltaTime = 0;
     
     // Animation loop
-    const animate = () => {
-      // Smoothly move camera based on mouse position
-      mouseX += (targetMouseX - mouseX) * 0.05;
-      mouseY += (targetMouseY - mouseY) * 0.05;
+    const animate = (currentTime) => {
+      requestAnimationFrame(animate);
       
-      camera.position.x += (mouseX - camera.position.x) * 0.05;
-      camera.position.y += (-mouseY - camera.position.y) * 0.05;
+      // Calculate delta time to ensure smooth animation even on slower devices
+      if (!lastTime) lastTime = currentTime;
+      deltaTime += currentTime - lastTime;
+      lastTime = currentTime;
+      
+      // Only update if enough time has passed (fixed timestep)
+      if (deltaTime < timeStep) return;
+      
+      // Update based on fixed timestep
+      while (deltaTime >= timeStep) {
+        // Smoothly move camera based on mouse position (reduced effect)
+        mouseX += (targetMouseX - mouseX) * 0.03;
+        mouseY += (targetMouseY - mouseY) * 0.03;
+        
+        camera.position.x += (mouseX - camera.position.x) * 0.03;
+        camera.position.y += (-mouseY - camera.position.y) * 0.03;
+        
+        // Rotate the sun (SLOWER rotation)
+        sun.rotation.y += 0.0002;
+        sunGlow.rotation.y -= 0.0001;
+        
+        // Update planets
+        planets.forEach(planet => {
+          const userData = planet.userData;
+          userData.angle += userData.speed;
+          
+          // Calculate new position
+          planet.position.x = Math.cos(userData.angle) * userData.distance;
+          planet.position.z = Math.sin(userData.angle) * userData.distance;
+          
+          // Rotate planet
+          planet.rotation.y += userData.speed * 2;
+        });
+        
+        // Slowly rotate stars
+        stars.rotation.y += 0.00002;
+        
+        deltaTime -= timeStep;
+      }
+      
+      // Look at scene center
       camera.lookAt(scene.position);
       
-      // Rotate the sun (SLOWER rotation)
-      sun.rotation.y += 0.0005;
-      sunGlow.rotation.y -= 0.0002;
-      
-      // Update planets
-      planets.forEach(planet => {
-        const userData = planet.userData;
-        userData.angle += userData.speed;
-        
-        // Calculate new position
-        planet.position.x = Math.cos(userData.angle) * userData.distance;
-        planet.position.z = Math.sin(userData.angle) * userData.distance;
-        
-        // Rotate planet (SLOWER rotation)
-        planet.rotation.y += userData.speed * 5; // Reduced from 10 to 5
-        
-        // Gradually return planet distance to original if it was changed by mouse interaction
-        if (userData.distance !== userData.originalDistance) {
-          userData.distance += (userData.originalDistance - userData.distance) * 0.05;
-        }
-      });
-      
-      // Slowly rotate stars
-      stars.rotation.y += 0.00005; // Reduced from 0.0001 to 0.00005
-      
+      // Render scene
       renderer.render(scene, camera);
-      requestAnimationFrame(animate);
     };
     
     animate();
     
     // Handle window resize
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-      const width = container.clientWidth;
-      const height = container.clientHeight;
-      
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
+      // Debounce resize events
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      }, 250);
     });
     
     // Handle visibility changes for performance
-    let hidden, visibilityChange;
-    
-    if (typeof document.hidden !== "undefined") {
-      hidden = "hidden";
-      visibilityChange = "visibilitychange";
-    } else if (typeof document.msHidden !== "undefined") {
-      hidden = "msHidden";
-      visibilityChange = "msvisibilitychange";
-    } else if (typeof document.webkitHidden !== "undefined") {
-      hidden = "webkitHidden";
-      visibilityChange = "webkitvisibilitychange";
-    }
-    
-    function handleVisibilityChange() {
-      if (document[hidden]) {
-        // Pause animation when tab/window is not visible
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        // Stop rendering when tab is not visible
         renderer.setAnimationLoop(null);
       } else {
-        // Resume animation
+        // Resume rendering
         renderer.setAnimationLoop(animate);
       }
-    }
-    
-    if (typeof document.addEventListener !== "undefined" && hidden !== undefined) {
-      document.addEventListener(visibilityChange, handleVisibilityChange, false);
-    }
+    });
     
     // Add mobile detection (hide on mobile)
     function checkMobileView() {
       const isMobile = window.innerWidth <= 768;
-      renderer.domElement.style.display = isMobile ? 'none' : 'block';
+      if (isMobile) {
+        container.style.display = 'none';
+      } else {
+        container.style.display = 'block';
+      }
     }
     
     window.addEventListener('resize', checkMobileView);

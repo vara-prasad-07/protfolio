@@ -94,27 +94,23 @@ main {
 .hero {
   display: flex;
   align-items: center;
-  padding: 220px 80px 0px;
-  flex-direction: row;
-  justify-content: space-between;
-  
+  padding: 220px 80px 0px; 
 }
 
-
-.animation-container {
+.hero::after{
+   content: "";
   position: absolute;
-  top: 20px;
-  right: -320px;
+  top: 0;
+  right: -450px;
   bottom: -60px;
+  background-image: url(../assets/images/pattern.png);
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: contain;
   width: 85%;
   height: 100%;
-  z-index: -1;
 }
-@media screen and (max-width: 768px) {
-  .animation-container {
-    display: none;
-  }
-}
+
 
 .left {
   color: var(--text-secondary);
