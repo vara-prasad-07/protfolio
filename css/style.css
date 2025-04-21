@@ -17,7 +17,18 @@ header {
   width: 100%;
   z-index: 99;
 }
-
+.logo{
+  animation: rotateY 3s linear infinite;
+}
+@keyframes rotateY {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+    
+  }
+}
 nav {
   background-color: var(--bg-color-primary);
   box-shadow: var(--box-shadow);
@@ -231,8 +242,30 @@ main {
   flex-direction: column;
   padding: 30px 0 0px;
   animation: slide-right 3s ease-in 1s forwards;
+  margin: 50px 0px 20px 10px ;
 }
-
+.technologies h4{
+  font-size: 36px;
+}
+.toolslayout{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0px 20px 0px;
+}
+@media screen and (max-width: 768px){
+  .toolslayout{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  .technologies h4{
+    font-size: 28px;
+  }
+}
 @keyframes slide-right {
   from {
     left: -800px;
@@ -382,30 +415,50 @@ main {
   background-repeat: no-repeat;
   transition: all 0.3s ease-in-out;
   min-height: 250px;
+  object-fit: contain;
+  width: 100%;
 }
 
 .project-box:nth-child(1) {
   background-image: url(https://res.cloudinary.com/diryolcmm/image/upload/v1743947384/Screenshot_2025-04-06_191948_adsqrl.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+   object-fit: contain;
 }
 
 .project-box:nth-child(2) {
   background-image: url(https://res.cloudinary.com/diryolcmm/image/upload/v1743947909/Screenshot_2025-04-06_192831_grzkrs.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  object-fit: contain;
 }
 
 .project-box:nth-child(3) {
   background-image: url(https://res.cloudinary.com/diryolcmm/image/upload/v1743948498/atminterface_b47g6u.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+   object-fit: contain;
 }
 
 .project-box:nth-child(4) {
   background-image: url(https://res.cloudinary.com/diryolcmm/image/upload/v1743948749/Screenshot_2025-04-06_194243_vc0sgv.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+   object-fit: contain;
 }
 
 .project-box:nth-child(5) {
   background-image: url(https://res.cloudinary.com/diryolcmm/image/upload/v1743949551/Screenshot_2025-04-06_195559_euxtxg.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+   object-fit: contain;
 }
 
 .project-box:nth-child(6) {
   background-image: url(https://res.cloudinary.com/diryolcmm/image/upload/v1743949776/Screenshot_2025-04-06_195947_vlgtsd.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+   object-fit: contain;
 }
 
 .project-box:nth-child(7) {

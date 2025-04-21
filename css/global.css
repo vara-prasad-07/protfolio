@@ -404,6 +404,9 @@ sup {
   .project-text {
     top: 15px !important;
   }
+  .project-box{
+    padding: 14px;
+  }
 
   .article-wrapper {
     display: flex !important;
