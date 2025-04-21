@@ -290,6 +290,8 @@ main {
 .tools ul li {
   padding: 3px 40px 3px 0;
   margin-top: 2px;
+  display: flex;
+  flex-direction: row;
 }
 
 /* -- Projects -- */
