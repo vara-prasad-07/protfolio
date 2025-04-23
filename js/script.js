@@ -54,6 +54,9 @@ const themeSwitch = document.querySelector(
   '.theme-switch input[type="checkbox"]'
 );
 let skillhead=document.getElementById("head")
+let interntype=document.getElementById("intertype")
+let interdesp=document.getElementById("interndesp")
+let remotespan=document.getElementById("remotespan")
 themeSwitch.addEventListener("change", changeTheme, false);
 
 //  Save selected mode in Local Storage
@@ -62,6 +65,9 @@ function changeTheme(e) {
     document.documentElement.setAttribute("data-theme-color", "dark");
     localStorage.setItem("theme", "dark");
     skillhead.style.color="white"
+    interntype.style.color="white"
+    interdesp.style.color="white"
+    remotespan.style.color="white"
     lightSwitch.classList.remove("hide");
     lightLogo.classList.remove("hide");
    

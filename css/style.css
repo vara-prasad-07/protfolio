@@ -779,3 +779,93 @@ footer {
 .copyright {
   font-size: 0.8rem;
 }
+
+/*---professtional experience---*/
+/* Professional Experience Section */
+.experience {
+  padding: 60px 80px;
+  background-color: var(--bg-color-secondary);
+  color: var(--text-primary);
+}
+
+.experience h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  color: var(--cta-primary);
+}
+
+.experience-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.experience-item {
+  background-color: var(--bg-color-primary);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s ease;
+}
+
+.experience-item:hover {
+  transform: scale(1.02);
+}
+
+.experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.experience-header h3 {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.experience-header span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.experience-details p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 10px 0;
+}
+
+.experience-details .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.experience-details .tags span {
+  background-color: var(--cta-primary);
+  color: var(--color-white);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .experience {
+    padding: 40px 20px;
+  }
+
+  .experience-header h3 {
+    font-size: 1rem;
+  }
+
+  .experience-header span {
+    font-size: 0.8rem;
+  }
+
+  .experience-details p {
+    font-size: 0.85rem;
+  }
+}
