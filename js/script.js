@@ -53,7 +53,7 @@ const darkLogo = document.querySelector(".dark-logo");
 const themeSwitch = document.querySelector(
   '.theme-switch input[type="checkbox"]'
 );
-
+let skillhead=document.getElementById("head")
 themeSwitch.addEventListener("change", changeTheme, false);
 
 //  Save selected mode in Local Storage
@@ -61,10 +61,10 @@ function changeTheme(e) {
   if (e.target.checked) {
     document.documentElement.setAttribute("data-theme-color", "dark");
     localStorage.setItem("theme", "dark");
-
+    skillhead.style.color="white"
     lightSwitch.classList.remove("hide");
     lightLogo.classList.remove("hide");
-
+   
     darkSwitch.classList.add("hide");
     darkLogo.classList.add("hide");
   } else {
