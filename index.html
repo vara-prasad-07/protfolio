@@ -144,6 +144,38 @@
         </div>
         
       </section>
+      <section class="chat-container" id="desktop-chat">
+    <div class="chat-content desktop-chat-content">
+        <div class="radial-background"></div>
+        <div class="chat-box" id="desktop-chat-box">
+            <div class="msg-main-container" id="desktop-msg-container"></div>
+        </div>
+        
+        <div class="sparkle-icon">✨</div>
+        <h1 class="main-prompt">Ask about me anything</h1>
+        
+        <div class="suggestions">
+            <div style="width: 100%; max-width: 600px;">
+                <p class="suggestion-label">Suggestions on what to ask?</p>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button class="suggestion-btn desktop-suggestion">What is your professional experience?</button>
+                    <button class="suggestion-btn desktop-suggestion">Which one of your projects is performing the best?</button>
+                    <button class="suggestion-btn desktop-suggestion">What skills you are best at?</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" class="chat-input" id="desktop-chat-input" placeholder="Let us have a small Chat..." />
+            <button class="send-button" id="desktop-send-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</section>
     </main>
 
     <!-- About Me -->
@@ -153,7 +185,7 @@
           <img
             loading="lazy"
             class="photo"
-            src="https://res.cloudinary.com/diryolcmm/image/upload/v1743945125/profileprotfolio_npw0ue.jpg"
+            src="https://res.cloudinary.com/diryolcmm/image/upload/c_crop,ar_3:4/v1751622491/WhatsApp_Image_2025-06-06_at_12.10.22_66873e16_flqa6e.jpg"
             alt=""
           />
         </div>
@@ -599,8 +631,54 @@
     <div class="scrollup">
       <a href="#" id="scroll-btn"><i class="fas fa-angle-up"></i></a>
     </div>
+    <!-- Floating Chat Icon (visible only on mobile) -->
+<div class="floating-chat-icon" id="openChatBtn">
+  <svg width="36" height="36" fill="currentColor" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="8" fill="#6C63FF"/>
+    <path d="M17 2L7 12h4v8l6-10h-4z" fill="#fff"/>
+  </svg>
+</div>
+
+<!-- Chat Popup Modal -->
+<!-- Mobile Chat Popup -->
+<div class="chat-popup-modal" id="mobile-chat-modal">
+    <div class="chat-popup-content" id="mobile-chat">
+        <span class="close-chat-popup" id="mobile-close-btn">&times;</span>
+        
+        <div class="chat-content mobile-chat-content">
+            <div class="radial-background"></div>
+            <div class="chat-box" id="mobile-chat-box">
+                <div class="msg-main-container" id="mobile-msg-container"></div>
+            </div>
+            
+            <div class="sparkle-icon">✨</div>
+            <h1 class="main-prompt">Ask about me anything</h1>
+            
+            <div class="suggestions">
+                <div style="width: 100%; max-width: 600px;">
+                    <p class="suggestion-label">Suggestions on what to ask?</p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button class="suggestion-btn mobile-suggestion">What is your professional experience?</button>
+                        <button class="suggestion-btn mobile-suggestion">Which one of your projects is performing the best?</button>
+                        <button class="suggestion-btn mobile-suggestion">What skills you are best at?</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-container">
+                <input type="text" class="chat-input" id="mobile-chat-input" placeholder="Let us have a small Chat..." />
+                <button class="send-button" id="mobile-send-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script src="./js/mixitup.min.js"></script>
-    <script src="./js/script.js"></script>
+    <script type="module" src="./js/script.js"></script>
   </body>
 </html>
